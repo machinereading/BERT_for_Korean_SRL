@@ -71,7 +71,7 @@ where the first annotation is a SRL for the verb '태어난', and second is for 
 The original dataset (Lee et al., 2015) is based on the dependency-based SRL. Each thematic role (e.g. ARG0) is annotated for a token which is a syntactic head of argument. 
 
 ## Performance
-
+<img src="./fig.png" width="60%" height="60%">
 
 ## Licenses
 * `CC BY-NC-SA` [Attribution-NonCommercial-ShareAlike](https://creativecommons.org/licenses/by-nc-sa/2.0/)
