@@ -72,7 +72,7 @@ The original dataset (Lee et al., 2015) is based on the dependency-based SRL. Ea
 
 ## Performance
 <img src="./fig.png" width="40%" height="40%">
-The model is evaluated for argument identification task, in terms of F1. At the epoch 5, F1 score is 79.83%. To the best of our knowledge, the state-of-the-art model is Bae et al., (2017), where F1 is 78.84%. 
+The model is evaluated for argument identification task, in terms of F1. At the epoch 5, F1 score is 79.83%. The model is available now. To the best of our knowledge, the state-of-the-art model is Bae et al., (2017), where F1 is 78.84%. 
 
 ## REFERENCE
 Changki Lee, Soojong Lim, Hyunki Kim. Korean Semantic Role Labeling Using Structured SVM. In Proceddings of the KIISE Korea Computer Congress 2015, 42.2: 220-226. (in Korean)
