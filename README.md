@@ -2,7 +2,7 @@
 
 ## About
 BERT_for_Korean_SRL is a semantic role labeling (SRL) module for Korean text. 
-It is based on BERT model (`bert-base-multilingual-cased`) , and uses the Korean PropBank which is modified by Lee et al., (2015)
+It is based on BERT model (`bert-base-multilingual-cased`) , and was trained by using the Korean PropBank data which is modified by Lee et al., (2015)
 
 ## prerequisite
 * `python 3`
@@ -19,12 +19,13 @@ Please follow this:
 ```
 cd ~/.pytorch-pretrained-bert
 ```
-* (2) make sure what file is a vocabulary file for `bert-base-multilingual-cased`. For example, if the url `https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-multilingual-cased-vocab.txt` is in the file `9626...252.json`, another file with same name `9626...252` is the vocabulary file for `bert-base-multilingual-cased`.
+* (2) make sure what file is a vocabulary file for `bert-base-multilingual-cased`. 
+For example, if the url `https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-multilingual-cased-vocab.txt` is in the file `9626...252.json` (file name would be different), another file with same name `9626...252` is the vocabulary file for `bert-base-multilingual-cased`.
 * (3) copy the file `'./data/bert-multilingual-cased-dict-add-frames'` to that folder.
 ```
 cp ./data/bert-multilingual-cased-dict-add-frames ~/.pytorch-pretrained-bert/9626...252
 ```
-* (don't forgtt making backup file for `9626...252`)
+* (don't forget to make a back-up file for `9626...252`)
 
 ## How to use
 
