@@ -8,78 +8,69 @@ It is based on BERT model (`bert-base-multilingual-cased`) , and uses the Korean
 * `python 3`
 * `pytorch-pretrained-BERT` ([Link](https://github.com/huggingface/pytorch-pretrained-BERT))
 
-## How to use
-**Install**
-
+## How to Install 
 First, install `pytorch-pretrained-BERT`.
 ```
 pip3 install pytorch-pretrained-bert
 ```
-Second, copy a file `'./data/bert-multilingual-cased-dict-add-frames' to your pytorch-pretrained-bert tokenizer's vocabulary.
+Second, copy a file `'./data/bert-multilingual-cased-dict-add-frames'` to your pytorch-pretrained-bert tokenizer's vocabulary.
 Please follow this:
-* (1) may your vocabulary is in your home 
+* (1) may your vocabulary is in `.pytorch-pretrained-bert`folder under your home. 
+```
+cd ~/.pytorch-pretrained-bert
+```
+* (2) make sure what file is a vocabulary file for `bert-base-multilingual-cased`. For example, if the url `https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-multilingual-cased-vocab.txt` is in the file `9626...252.json`, another file with same name `9626...252` is the vocabulary file for `bert-base-multilingual-cased`.
+* (3) copy the file `'./data/bert-multilingual-cased-dict-add-frames'` to that folder.
+```
+cp ./data/bert-multilingual-cased-dict-add-frames ~/.pytorch-pretrained-bert/9626...252
+```
+* (don't forgtt making backup file for `9626...252`)
 
-
-### (1) How to use SRL-based frame parser
-**prerequisite**
-
-SRL-based frame parser is working only for Korean. It requires NLP modules as a preprocessing. In this library, we use Korean NLP service [wiseNLU](http://aiopen.etri.re.kr/guide_wiseNLU.php). Please get API code and edit the config file first. 
+## How to use
 
 **Download the pretrained model**
 
-Download two pretrained model files to `{your_model_dir}` (e.g. `/home/models`). Do not change the model file names.
-* **kfn1.1-frameid.pt** ([download](https://drive.google.com/open?id=1fgmUU9trekwP-fBc7pz62n0lgJH9P4eJ))
-* **kfn1.1-arg_classifier.pt** ([download](https://drive.google.com/open?id=1jZEvrmQEvRwDDS3wDZ4pqHbyhqoJ99Wy))
+Download two pretrained model files to `{your_model_dir}` (e.g. `/home/model/bert_ko_srl_model.pt`). 
+* **Download:** ([click](https://drive.google.com/open?id=1fgmUU9trekwP-fBc7pz62n0lgJH9P4eJ))
 
 **Import srl_based_parser (in your python code)**
+(make sure that your code is in a parent folder of BERT_for_Korean_SRL)
 ```
-from KAIST_frame_parser import srl_based_parser
-language = 'ko' # default
-version = 1.1 # default
-model_dir = {your_model_dir} # absolute_path (e.g. /home/models)
-parser = srl_based_parser.SRLbasedParser(language=language, version=version, model_dir=model_dir)
+from BERT_for_Korean_SRL import parser
+
+model_dir = {your_model_dir} # absolute_path (e.g. /home/model/bert_ko_srl_model.pt)
+srl_parser = parser.srl_parser(model_dir=model_dir)
 ```
 
 **parse the input text**
 ```
-text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'
-sentence_id = 'input_sentence' # (optional) you can assign the input text to its ID.
-parsed = parser.parser(text, sentence_id=sentence_id)
+text = '애플은 미국에서 태어난 스티브 잡스가 설립한 컴퓨터 회사이다.'
+parsed = srl_parser.ko_srl_parser(text)
 ```
 
 **result**
 
-The result consits of following three parts: (1) triple format, (2) conll format,  and (3) [pubannotation format](https://textae.pubannotation.org/). 
+The result is a list, which consists of multiple SRL structures. Each SRL structure is in a list, which consists of three lists: (1) tokens, (2) predicates, and (3) arguments. For example, for the given input text, the output is in the following format:
 
-* (1) triple format (`parsed['graph']`)
 ```
-[
-    ('input_sentence', 'nif:isString', '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'),
-    ('frame:Origin', 'frdf:provinence', 'input_sentence'),
-    ('frame:Origin', 'frdf:lu', '미국.n'),
-    ('frame:Origin', 'frdf:score', '1.0'),
-    ('frame:Being_born', 'frdf:provinence', 'input_sentence'),
-    ('frame:Being_born', 'frdf:lu', '태어나다.v'),
-    ('frame:Being_born', 'frdf:score', '1.0'),
-    ('frame:Being_born', 'arg:Child', '헤밍웨이는'),
-    ('frame:Being_born', 'arg:Time', '1899년 7월 21일'),
-    ('frame:Being_born', 'arg:Place', '미국 일리노이에서'),
-    ('frame:Killing', 'frdf:provinence', 'input_sentence'),
-    ('frame:Killing', 'frdf:lu', '자살.n'),
-    ('frame:Killing', 'frdf:score', '1.0'),
-    ('frame:Death', 'frdf:provinence', 'input_sentence'),
-    ('frame:Death', 'frdf:lu', '사망.n'),
-    ('frame:Death', 'frdf:score', '1.0'),
-    ('frame:Death', 'arg:Protagonist', '헤밍웨이는'),
-    ('frame:Death', 'arg:Time', '62세에'),
-    ('frame:Death', 'arg:Manner', '자살로')
+[ 
+    [
+        ['애플은', '미국에서', '태어난', '스티브', '잡스가', '설립한', '컴퓨터', '회사이다.'], 
+        ['_', '_', '태어나.v', '_', '_', '_', '_', '_'], 
+        ['O', 'ARGM-LOC', 'O', 'O', 'ARG1', 'O', 'O', 'O']
+    ],   
+
+    [
+        ['애플은', '미국에서', '태어난', '스티브', '잡스가', '설립한', '컴퓨터', '회사이다.'], 
+        ['_', '_', '_', '_', '_', '설립하.v', '_', '_'], 
+        ['O', 'O', 'O', 'O', 'ARG0', 'O', 'O', 'ARG1']
+    ]
 ]
 ```
-* (2) conll format (`parsed['conll']`)
-The result is a list of (multiple) FrameNet annotations for a given sentence. 
-Each annotation consits of 4 lists:  tokens, target, frame, and its arguments
+where the first annotation is a SRL for the verb '태어난', and second is for the verb '설립한'. 
+The original dataset (Lee et al., 2015) is based on the dependency-based SRL. Each thematic role (e.g. ARG0) is annotated for a token which is a syntactic head of argument. 
 
-
+## Performance
 
 
 ## Licenses
@@ -89,7 +80,7 @@ Each annotation consits of 4 lists:  tokens, target, frame, and its arguments
 ## Publisher
 [Machine Reading Lab](http://mrlab.kaist.ac.kr/) @ KAIST
 
-## Contact
+## Contact to author
 Younggyun Hahm. `hahmyg@kaist.ac.kr`, `hahmyg@gmail.com`
 
 ## Acknowledgement
