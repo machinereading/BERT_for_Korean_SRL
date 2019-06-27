@@ -45,7 +45,7 @@ srl_parser = parser.srl_parser(model_dir=model_dir)
 
 **parse the input text**
 ```
-text = '애플은 미국에서 태어난 스티브 잡스가 설립한 컴퓨터 회사이다.'
+text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고 62세에 자살로 사망했다.'
 parsed = srl_parser.ko_srl_parser(text)
 ```
 
@@ -56,19 +56,19 @@ The result is a list, which consists of multiple SRL structures. Each SRL struct
 ```
 [ 
     [
-        ['애플은', '미국에서', '태어난', '스티브', '잡스가', '설립한', '컴퓨터', '회사이다.'], 
-        ['_', '_', '태어나.v', '_', '_', '_', '_', '_'], 
-        ['O', 'ARGM-LOC', 'O', 'O', 'ARG1', 'O', 'O', 'O']
-    ],   
+        ['헤밍웨이는', '1899년', '7월', '21일', '미국', '일리노이에서', '태어났고', '62세에', '자살로', '사망했다.'], 
+        ['_', '_', '_', '_', '_', '_', '태어나.v', '_', '_', '_'], 
+        ['ARG0', 'O', 'O', 'ARGM-TMP', 'O', 'ARGM-LOC', 'O', 'O', 'O', 'O']
+    ],
 
     [
-        ['애플은', '미국에서', '태어난', '스티브', '잡스가', '설립한', '컴퓨터', '회사이다.'], 
-        ['_', '_', '_', '_', '_', '설립하.v', '_', '_'], 
-        ['O', 'O', 'O', 'O', 'ARG0', 'O', 'O', 'ARG1']
+        ['헤밍웨이는', '1899년', '7월', '21일', '미국', '일리노이에서', '태어났고', '62세에', '자살로', '사망했다.'], 
+        ['_', '_', '_', '_', '_', '_', '_', '_', '_', '사망하.v'], 
+        ['ARG1', 'O', 'O', 'O', 'O', 'O', 'O', 'ARGM-TMP', 'ARGM-PRD', 'O']
     ]
 ]
 ```
-where the first annotation is a SRL for the verb '태어난', and second is for the verb '설립한'. 
+where the first annotation is a SRL for the verb '태어나.v', and second is for the verb '사망하.v'. 
 The original dataset (Lee et al., 2015) is based on the dependency-based SRL. Each thematic role (e.g. ARG0) is annotated for a token which is a syntactic head of argument. 
 
 ## Performance
