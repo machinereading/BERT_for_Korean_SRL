@@ -5,9 +5,9 @@
 
 
 import json
-import dataio
 import sys
-sys.path.append('../')
+sys.path.insert(0,'../')
+from BERT_for_Korean_SRL import dataio
 
 import numpy as np
 
@@ -43,7 +43,7 @@ except:
     dir_path = '.'
 
 
-# In[2]:
+# In[3]:
 
 
 def load_data():
@@ -55,8 +55,10 @@ def load_data():
     
     return trn, tst
 
+# trn, tst = load_data()
 
-# In[5]:
+
+# In[4]:
 
 
 class for_BERT():
@@ -142,13 +144,13 @@ class for_BERT():
         return bert_inputs
 
 
-# In[6]:
+# In[5]:
 
 
 # bert_io = for_BERT(mode='training')
 
 
-# In[7]:
+# In[6]:
 
 
 # trn_data = bert_io.convert_to_bert_input(trn)
@@ -159,7 +161,7 @@ class for_BERT():
 
 
 def train():
-    model_path = dir_path+'/models/'
+    model_path = '/disk/data/models/kosrl_1105/'
     print('your model would be saved at', model_path)
     
     model = BertForTokenClassification.from_pretrained("bert-base-multilingual-cased", num_labels=len(bert_io.tag2idx))
@@ -239,10 +241,10 @@ def flat_accuracy(preds, labels):
     return np.sum(pred_flat == labels_flat) / len(labels_flat)
 
 def test():
-    model_path = dir_path+'/models/'
+    model_path = model_path = '/disk/data/models/kosrl_1105/'
     models = glob.glob(model_path+'*.pt')
     
-    result_path = dir_path+'/results/'
+    result_path = model_path = '/disk/data/models/result_kosrl_1105/'
     results = []
     
     for m in models:

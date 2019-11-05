@@ -1,13 +1,13 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[7]:
 
 
 import json
 
 
-# In[70]:
+# In[6]:
 
 
 def raw2tagseq(data):
@@ -51,16 +51,50 @@ def raw2tagseq(data):
     return result
 
 
-# In[71]:
+# In[23]:
+
+
+def conll2tagseq(data):
+    tokens, preds, args = [],[],[]
+    result = []
+    for line in data:
+        line = line.strip()
+        if line.startswith('#'):
+            pass
+        elif line != '':
+            t = line.split('\t')
+            token = t[1]
+            pred = t[3]
+            arg = t[4]
+            
+            tokens.append(token)
+            preds.append(pred)
+            args.append(arg)
+        else:
+            
+            sent = []
+            sent.append(tokens)
+            sent.append(preds)
+            sent.append(args)
+            
+            result.append(sent)
+            tokens, preds, args = [],[],[]
+    return result
+        
+
+
+# In[24]:
 
 
 def load_srl_data():
-    with open('./data/srl.train.formatted.conll') as f:
+    with open('/disk/data/corpus/koreanPropBank/revised/srl.dp_based.train.conll') as f:
         d = f.readlines()    
-    trn = raw2tagseq(d)
-    with open('./data/srl.test.formatted.conll') as f:
+#     trn = raw2tagseq(d)
+    trn = conll2tagseq(d)
+    with open('/disk/data/corpus/koreanPropBank/revised/srl.dp_based.test.conll') as f:
         d = f.readlines()    
-    tst = raw2tagseq(d)
+#     tst = raw2tagseq(d)
+    tst = conll2tagseq(d)
     
     return trn, tst
 
